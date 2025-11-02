@@ -19,10 +19,11 @@ const personSchema = new mongoose.Schema({
 const Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
+  // Crear una instancia del modelo `Person`
   const person = new Person({
-    name: "juan perez",
+    name: "Juan perez",
     age: 20,
-    favoriteFoods: ["pizza","asado","ensalada"]
+    favoriteFoods: ["Pizza", "Asado", "Ensalada"]
   });
   person.save((err, data) => {
     if (err) return done(err); // Si hay error, lo devolvemos
