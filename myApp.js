@@ -3,10 +3,10 @@ const express = require ('express');
 const app = express();
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URI,{useNewUrlParser:true, useUnifiedTopology:true,});
+mongoose.connect(process.env.MONGO_URI,{useNewUrlParser:true, useUnifiedTopology:true});
 
 // Definir el schema
-const personSchema = new mongoose.Schema({name: { type: String, required: true }, age: Number, favoriteFoods: [String]});
+const personSchema = new mongoose.Schema({name: {type: String, required:true}, age: Number, favoriteFoods: [String]});
 
 
 const Person = mongoose.model("Person", personSchema);
