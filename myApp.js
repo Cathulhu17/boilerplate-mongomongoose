@@ -24,10 +24,10 @@ const createAndSavePerson = (done) => {
     age: 20,
     favoriteFoods: ["pizza","asado","ensalada"]
   });
- person.save((err.data){
-  if (err) return done(err);
-  done(null,data);
- });
+  person.save((err, data) => {
+    if (err) return done(err); // Si hay error, lo devolvemos
+    done(null, data);          // Si todo sale bien, devolvemos el documento guardado
+  });
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
