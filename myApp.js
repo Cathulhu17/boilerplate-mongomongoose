@@ -3,18 +3,15 @@ const express = require ('express');
 const app = express();
 const mongoose = require('mongoose');
 
-const mySecret = process.env['MONGO_URI'];
-
-mongoose.connect(mySecret, { useNewUrlParser: true, useUnifiedTopology: true });
-
-mongoose.connection.once('open', () => {
-  console.log("✅ Conectado a MongoDB");
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
 });
 
-mongoose.connection.on('error', err => {
-  console.error("❌ Error de conexión:", err);
-});
-Q
+const db = mongoose.connection;
+
+db.on('error', err => console.error("❌ Error de conexión:", err));
+db.once('open', () => console.log("✅ Conectado a MongoDB"));
 
 // Definir el schema
 const personSchema = new mongoose.Schema({
@@ -34,10 +31,16 @@ const createAndSavePerson = (done) => {
     favoriteFoods: ["Pizza", "Asado"]
   });
 
-  person.save((err, data) => {
-    if (err) return done(err);
-    done(null, data);
-  });
+createAndSavePerson.save((err) => {
+  if (err) {
+    console.error("Error saving person:", err); 
+  } else {
+    console.log("Person successfully saved"); 
+  }
+})
+
+const createAndSavePerson = (done) => {
+  done(null /*, data*/);
 };
 
 
