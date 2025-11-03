@@ -3,12 +3,18 @@ const express = require ('express');
 const app = express();
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+const mySecret = process.env['MONGO_URI'];
 
 mongoose.connect(mySecret, { useNewUrlParser: true, useUnifiedTopology: true });
+
+mongoose.connection.once('open', () => {
+  console.log("✅ Conectado a MongoDB");
+});
+
+mongoose.connection.on('error', err => {
+  console.error("❌ Error de conexión:", err);
+});
+Q
 
 // Definir el schema
 const personSchema = new mongoose.Schema({
@@ -19,7 +25,7 @@ const personSchema = new mongoose.Schema({
 
 
 
-const Person = mongoose.model("Person", personSchema);;
+const Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
   const person = new Person({
