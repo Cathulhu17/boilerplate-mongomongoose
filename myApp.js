@@ -22,17 +22,27 @@ const personSchema = new mongoose.Schema({name: {type: String, required:true}, a
 const Person = mongoose.model("Person", personSchema);
 
 const createAndSavePerson = (done) => {
-  // Crear una instancia del modelo `Person`
   const person = new Person({
-    name: "Juan perez",
+    name: "Juan Perez",
     age: 20,
     favoriteFoods: ["Pizza", "Asado", "Ensalada"]
   });
-  person.save((err, data) => {
-    if (err) return done(err); // Si hay error, lo devolvemos
-    done(null, data);          // Si todo sale bien, devolvemos el documento guardado
-  });
+
+  if (mongoose.connection.readyState !== 1) {
+    mongoose.connection.once("open", () => {
+      person.save((err, data) => {
+        if (err) return done(err);
+        done(null, data);
+      });
+    });
+  } else {
+    person.save((err, data) => {
+      if (err) return done(err);
+      done(null, data);
+    });
+  }
 };
+
 
 const createManyPeople = (arrayOfPeople, done) => {
   done(null /*, data*/);
