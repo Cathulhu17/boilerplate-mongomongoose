@@ -8,15 +8,19 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 });
 
-mongoose.connection.once('open', () => {
-  console.log("✅ Conectado a MongoDB");
+const db = mongoose.connection;
+
+db.on('error', err => console.error("❌ Error de conexión:", err));
+db.once('open', () => console.log("✅ Conectado a MongoDB"));
+
+
+// Definir el schema
+const personSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  age: Number,
+  favoriteFoods: [String]
 });
 
-mongoose.connection.on('error', err => {
-  console.error("❌ Error de conexión:", err);
-});
-// Definir el schema
-const personSchema = new mongoose.Schema({name: {type: String, required:true}, age: Number, favoriteFoods: [String]});
 
 
 const Person = mongoose.model("Person", personSchema);
@@ -24,24 +28,26 @@ const Person = mongoose.model("Person", personSchema);
 const createAndSavePerson = (done) => {
   const person = new Person({
     name: "Juan Perez",
-    age: 20,
-    favoriteFoods: ["Pizza", "Asado", "Ensalada"]
+    age: 25,
+    favoriteFoods: ["Pizza", "Asado"]
   });
 
+  // Esperar a que la conexión esté abierta antes de guardar
   if (mongoose.connection.readyState !== 1) {
-    mongoose.connection.once("open", () => {
+    mongoose.connection.once('open', () => {
       person.save((err, data) => {
         if (err) return done(err);
-        done(null, data);
+        return done(null, data);
       });
     });
   } else {
     person.save((err, data) => {
       if (err) return done(err);
-      done(null, data);
+      return done(null, data);
     });
   }
 };
+
 
 
 const createManyPeople = (arrayOfPeople, done) => {
