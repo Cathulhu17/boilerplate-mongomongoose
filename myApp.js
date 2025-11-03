@@ -6,10 +6,15 @@ const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-.then(() => console.log("✅ MongoDB conectado correctamente"))
-.catch(err => console.error("❌ Error de conexión:", err));
+});
 
+mongoose.connection.once('open', () => {
+  console.log("✅ Conectado a MongoDB");
+});
+
+mongoose.connection.on('error', err => {
+  console.error("❌ Error de conexión:", err);
+});
 // Definir el schema
 const personSchema = new mongoose.Schema({name: {type: String, required:true}, age: Number, favoriteFoods: [String]});
 
