@@ -32,22 +32,11 @@ const createAndSavePerson = (done) => {
     favoriteFoods: ["Pizza", "Asado"]
   });
 
-  // Esperar a que la conexión esté abierta antes de guardar
-  if (mongoose.connection.readyState !== 1) {
-    mongoose.connection.once('open', () => {
-      person.save((err, data) => {
-        if (err) return done(err);
-        return done(null, data);
-      });
-    });
-  } else {
-    person.save((err, data) => {
-      if (err) return done(err);
-      return done(null, data);
-    });
-  }
+  person.save((err, data) => {
+    if (err) return done(err);
+    done(null, data);
+  });
 };
-
 
 
 const createManyPeople = (arrayOfPeople, done) => {
