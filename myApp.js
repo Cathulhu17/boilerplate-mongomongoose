@@ -13,6 +13,7 @@ const db = mongoose.connection;
 db.on('error', err => console.error("❌ Error de conexión:", err));
 db.once('open', () => console.log("✅ Conectado a MongoDB"));
 
+
 // Definir el schema
 const personSchema = new mongoose.Schema({
   name: { type: String, required: true },
