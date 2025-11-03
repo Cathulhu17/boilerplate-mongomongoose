@@ -8,11 +8,7 @@ mongoose.connect(process.env.MONGO_URI, {
   useUnifiedTopology: true
 });
 
-const db = mongoose.connection;
-
-db.on('error', err => console.error("❌ Error de conexión:", err));
-db.once('open', () => console.log("✅ Conectado a MongoDB"));
-
+mongoose.connect(mySecret, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Definir el schema
 const personSchema = new mongoose.Schema({
@@ -23,7 +19,7 @@ const personSchema = new mongoose.Schema({
 
 
 
-const Person = mongoose.model("Person", personSchema);
+const Person = mongoose.model("Person", personSchema);;
 
 const createAndSavePerson = (done) => {
   const person = new Person({
